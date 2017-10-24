@@ -24,7 +24,7 @@ class OrderRepository
      * @return array
      */
     public function getOrders(){
-        $sql = 'SELECT order_id, first_name, last_name FROM orders';
+        $sql = 'SELECT id, first_name, last_name FROM orders';
         $statement = $this->pdo->prepare($sql);
         $statement->execute();
         return $statement->fetchAll(PDO::FETCH_ASSOC);
