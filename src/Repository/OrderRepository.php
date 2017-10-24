@@ -36,11 +36,10 @@ class OrderRepository
      * @return mixed
      */
     public function getOrderById($id){
-        $sql = "SELECT * FROM orders, order_details 
-                WHERE order_id = :order_id";
+        $sql = "SELECT o.*, od.* FROM orders o LEFT JOIN order_details od ON O.id = OD.order_id WHERE order_id = :order_id";
         $statement = $this->pdo->prepare($sql);
         $statement->execute(array(':order_id' => $id));
-        return $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
     public function create() {
