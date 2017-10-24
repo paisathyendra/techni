@@ -1,0 +1,23 @@
+{
+    "name": "Techni",
+    "description": "Techni",
+    "type": "project",
+    "authors": [
+        {
+            "name": "Sathyendra Pai",
+            "email": "paisathyendra@gmail.com"
+        }
+    ],
+    "require": {
+        "php": "5.6.31",
+        "patricklouys/http": "~1.4",
+        "nikic/fast-route": "^1.2",
+        "filp/whoops": "~2.1",
+        "rdlowrey/auryn": "^1.4"
+    },
+    "autoload": {
+        "psr-4": {
+            "Spai\\": "src/"
+        }
+    }
+}
