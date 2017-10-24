@@ -1,5 +1,3 @@
 <?php
 
-echo "Hello World";
-
-?>
+require __DIR__ . '/../src/Bootstrap.php';
