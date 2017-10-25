@@ -72,7 +72,7 @@ class OrderController
             $this->orderRepo->validateOrderDetailFields($orderDetails);
             $order_id = $this->orderRepo->saveOrder($orderDetails);
             $this->response->setContent($order_id);
-        } catch (InvalidArgumentException $iaex) {
+        } catch (\InvalidArgumentException $iaex) {
             $this->response->setStatusCode(400);
             $this->response->setContent($iaex->getMessage());
         } catch (\Exception $ex) {
