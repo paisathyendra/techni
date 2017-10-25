@@ -45,6 +45,17 @@ class OrderRepository
     }
 
     /**
+     * @param $product_id
+     * @return mixed
+     */
+    public function getProductById($product_id) {
+        $sql = "SELECT * FROM products WHERE id = :product_id";
+        $statement = $this->pdo->prepare($sql);
+        $statement->execute(array(':product_id' => $product_id));
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    /**
      * @param $order
      * @return mixed
      */
@@ -83,31 +94,46 @@ class OrderRepository
      */
     public function validateOrderFields($order) {
         if(empty($order->first_name)) {
-            throw new InvalidArgumentException("First Name cannot be blank");
+            throw new \InvalidArgumentException("First Name cannot be blank");
         }
         if(empty($order->last_name)) {
-            throw new InvalidArgumentException("Last Name cannot be blank");
+            throw new \InvalidArgumentException("Last Name cannot be blank");
         }
         if(empty($order->phone)) {
-            throw new InvalidArgumentException("Phone number cannot be blank");
+            throw new \InvalidArgumentException("Phone number cannot be blank");
         }
         if(strlen($order->phone) < 10) {
-            throw new InvalidArgumentException("Invalid Phone Number");
+            throw new \InvalidArgumentException("Invalid Phone Number");
         }
         if(empty($order->email)) {
-            throw new InvalidArgumentException("Email cannot be blank");
+            throw new \InvalidArgumentException("Email cannot be blank");
         }
         if(empty($order->address)) {
-            throw new InvalidArgumentException("Address cannot be blank");
+            throw new \InvalidArgumentException("Address cannot be blank");
         }
     }
 
+    /**
+     * Validate Order Detail Fields
+     * @param $order
+     * @throws \Exception
+     */
     public function validateOrderDetailFields($order) {
         if(!isset($order->order_details) || count($order->order_details) == 0) {
-            throw new InvalidArgumentException("Invalid Order");
+            throw new \InvalidArgumentException("Invalid Order");
         }
 
-        //Check for valid product
-        //Check for stock
+        foreach($order->order_details as $od) {
+            $product_details = $this->getProductById($od->product_id);
+
+            if(empty($product_details)) {
+                throw new \InvalidArgumentException("Invalid Product");
+                break;
+            }
+            if($product_details['stock'] == 0) {
+                throw new \Exception("Product Stock Not available");
+                break;
+            }
+        }
     }
 }
