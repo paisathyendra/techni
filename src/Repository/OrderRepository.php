@@ -76,4 +76,38 @@ class OrderRepository
             echo $e->getMessage();
         }
     }
+
+    /**
+     * Validate Order Fields
+     * @param $order
+     */
+    public function validateOrderFields($order) {
+        if(empty($order->first_name)) {
+            throw new InvalidArgumentException("First Name cannot be blank");
+        }
+        if(empty($order->last_name)) {
+            throw new InvalidArgumentException("Last Name cannot be blank");
+        }
+        if(empty($order->phone)) {
+            throw new InvalidArgumentException("Phone number cannot be blank");
+        }
+        if(strlen($order->phone) < 10) {
+            throw new InvalidArgumentException("Invalid Phone Number");
+        }
+        if(empty($order->email)) {
+            throw new InvalidArgumentException("Email cannot be blank");
+        }
+        if(empty($order->address)) {
+            throw new InvalidArgumentException("Address cannot be blank");
+        }
+    }
+
+    public function validateOrderDetailFields($order) {
+        if(!isset($order->order_details) || count($order->order_details) == 0) {
+            throw new InvalidArgumentException("Invalid Order");
+        }
+
+        //Check for valid product
+        //Check for stock
+    }
 }

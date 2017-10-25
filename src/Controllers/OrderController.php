@@ -62,11 +62,22 @@ class OrderController
 
     /**
      * Submit Order
+     * ToDo Update Stock once order is placed successfully
      */
     public function submitOrder() {
-        $orderDetailsJson = file_get_contents('php://input');
-        $orderDetails = json_decode($orderDetailsJson);
-        $this->orderRepo->saveOrder($orderDetails);
+        try {
+            $orderDetailsJson = file_get_contents('php://input');
+            $orderDetails = json_decode($orderDetailsJson);
+            $this->orderRepo->validateOrderFields($orderDetails);
+            $this->orderRepo->validateOrderDetailFields($orderDetails);
+            $order_id = $this->orderRepo->saveOrder($orderDetails);
+            $this->response->setContent($order_id);
+        } catch (InvalidArgumentException $iaex) {
+            $this->response->setStatusCode(400);
+            $this->response->setContent($iaex->getMessage());
+        } catch (\Exception $ex) {
+            $this->response->setContent($ex->getMessage());
+        }
     }
 
 }
