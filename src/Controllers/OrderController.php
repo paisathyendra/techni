@@ -60,8 +60,13 @@ class OrderController
         $this->response->setContent(json_encode($order, JSON_FORCE_OBJECT));
     }
 
-    public function insertOrder() {
-        print_r($this->request);exit;
+    /**
+     * Submit Order
+     */
+    public function submitOrder() {
+        $orderDetailsJson = file_get_contents('php://input');
+        $orderDetails = json_decode($orderDetailsJson);
+        $this->orderRepo->saveOrder($orderDetails);
     }
 
 }

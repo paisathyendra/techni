@@ -10,6 +10,7 @@ $injector->define('Http\HttpRequest', [
     ':cookies' => $_COOKIE,
     ':files' => $_FILES,
     ':server' => $_SERVER,
+    ':jsondata' => file_get_contents('php://input')
 ]);
 
 $injector->alias('Http\Response', 'Http\HttpResponse');

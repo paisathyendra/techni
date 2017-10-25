@@ -3,6 +3,8 @@
 namespace Spai\Repository;
 
 use PDO;
+use Spai\Entity\OrderDetails;
+use Spai\Entity\Orders;
 
 class OrderRepository
 {
@@ -42,6 +44,36 @@ class OrderRepository
         return $statement->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function create() {
+    /**
+     * @param $order
+     * @return mixed
+     */
+    public function saveOrder($order) {
+        try {
+            $orders = new Orders($this->pdo);
+            $orders->setFirstName($order->first_name);
+            $orders->setLastName($order->last_name);
+            $orders->setPhone($order->phone);
+            $orders->setEmail($order->email);
+            $orders->setAddress($order->address);
+            $orders->setCreatedOn(date('Y-m-d H:i:s'));
+
+            $order_id = $orders->save();
+
+            $orderDetailsobj = new OrderDetails($this->pdo);
+
+            $orderDetails = $order->order_details;
+
+            foreach ($orderDetails as $orderDetailValue) {
+                $orderDetailsobj->setOrderId($order_id);
+                $orderDetailsobj->setProductId($orderDetailValue->product_id);
+                $orderDetailsobj->setQuantity($orderDetailValue->quantity);
+
+                $orderDetailsobj->save();
+            }
+            return $order_id;
+        } catch (\Exception $e) {
+            echo $e->getMessage();
+        }
     }
 }
