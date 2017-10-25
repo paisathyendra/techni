@@ -19,5 +19,11 @@
         "psr-4": {
             "Spai\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": { "Spai\\Tests\\": "tests/" }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "5.7"
     }
 }
